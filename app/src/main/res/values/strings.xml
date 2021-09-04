@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ServedCalculator-NZS3910</string>
+    <string name="is_inside_afterhours_string">Is Afterhours</string>
+    <string name="textON_insideAfterhoursstring">Afterhours</string>
+    <string name="textOFF_insideafterhoursstring">In hours</string>
 </resources>
