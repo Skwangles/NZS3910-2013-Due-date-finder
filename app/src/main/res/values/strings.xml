@@ -3,4 +3,10 @@
     <string name="is_inside_afterhours_string">Is Afterhours</string>
     <string name="textON_insideAfterhoursstring">Afterhours</string>
     <string name="textOFF_insideafterhoursstring">In hours</string>
+    <string name="_7_17_days">7+17 Days</string>
+    <string name="_7_3_2_5_days">7+3+2+5 Days</string>
+    <string name="enter_the_serving_date_the_clock_starts_from">Enter the serving date the clock STARTS from.</string>
+    <string name="date_format_information">Day/Month/Year</string>
+    <string name="_7_days_result">7 days:</string>
+    <string name="final_due_date_result">Final Due Date:</string>
 </resources>
