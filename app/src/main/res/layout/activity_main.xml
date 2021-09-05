@@ -5,14 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/Skwangles_Lavendar_Blush"
     tools:context=".MainActivity">
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="30dp" />
 
     <TextView
         android:id="@+id/usage_info"
+        android:textSize="20sp"
+        android:textColor="@color/Skwangles_onyx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -20,6 +19,8 @@
 
     <TextView
         android:id="@+id/Date_Format"
+        android:textSize="13sp"
+        android:textColor="@color/Skwangles_onyx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -59,8 +60,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
@@ -78,49 +78,84 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="@android:color/darker_gray"/>
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
+
         <Button
             android:id="@+id/process_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Process"/>
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
+            android:backgroundTint="@color/Skwangles_onyx"
+            android:textColor="@color/white"
+            android:text="@string/process_button_name" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/Process_warning_text"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/Skwangles_onyx"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#70A9A1">
+
+        <TextView
+            android:id="@+id/seven_days_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/_7_days_result" />
+            android:layout_alignParentTop="true"
+            android:text="@string/_7_days_result"
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/seven_days"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="" />
+            android:layout_below="@id/seven_days_info"
+            android:text=""
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/final_days_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/seven_days"
             android:gravity="center"
-            android:text="@string/final_due_date_result" />
+            android:text="@string/final_due_date_result"
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/three_weeks_plus_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="" />
+            android:layout_below="@id/final_days_info"
+            android:text=""
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="20sp" />
 
-    </LinearLayout>
-
+        <Button
+            android:id="@+id/change_region_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Change Region"
+            android:backgroundTint="@color/Skwangles_onyx"/>
+    </RelativeLayout>
 </LinearLayout>

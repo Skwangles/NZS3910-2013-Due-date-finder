@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegionSelect">
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"></Space>
+
+
+    <TextView
+        android:id="@+id/region_activity_titles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Skwangles_Green_Sheen"
+        android:text="NZS3910 - 24 Working Days"
+        android:textAlignment="center"
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="30sp" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"></Space>
+    <TextView
+        android:id="@+id/previous_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="30sp" />
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        />
+
+    <TextView
+        android:id="@+id/usage_info_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Choose Your Home Region"
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="18sp" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".1"></Space>
+
+    <Spinner
+        android:id="@+id/region_selection_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:gravity="center"
+        android:spinnerMode="dropdown" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".1"></Space>
+
+    <Button
+        android:id="@+id/Complete_setup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/Skwangles_onyx"
+        android:gravity="center"
+        android:text="Proceed" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1.8"></Space>
+
+</LinearLayout>
