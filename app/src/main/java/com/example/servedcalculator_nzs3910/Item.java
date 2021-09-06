@@ -123,14 +123,14 @@ class Organizer {
 }
 
 class Start {
-    private String Date;
+    private String date;
 
     public String getDate() {
-        return Date;
+        return date;
     }
 
-    public Start(String Date){
-        this.Date = Date;
+    public Start(String date){
+        this.date = date;
     }
 
     @Override
