@@ -75,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Setup of Spinners-------
         spinnerSetup();
 
-        publicHolidaysItemFromGoogle = fetchHolidayListFromInternet(); //Gets the list of public holidays in NZ
-        if (publicHolidaysItemFromGoogle == null){
-            Toast.makeText(this, "Issue occurred with getting from Google", Toast.LENGTH_SHORT).show();
-        }
         buttonSetup(); //Sets up event listeners and spinner adapters
 
     }
@@ -90,10 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int id = view.getId();
             if (id == R.id.button_processDates) {
                 Log.d("SuccessLog", "Processing Button Clicked");
-                fetchHolidayListFromInternet();
-                LocalDate serveDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
-                String[] deadlines = countDates(serveDate);
-                displayDeadlines(deadlines);
+                fetchHolidayListFromInternet();//Will fetch and wait asynchronously
             }
             if (id == R.id.button_changeregion) {
                 startSetupActivity();
@@ -233,43 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     //Gets the list of public holidays from Google
-    protected List<Item> fetchHolidayListFromInternet() {
 
-        String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
-        // en.new_zealand#holiday@group.v.calendar.google.com')
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BaseURL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
-        Call<Holidays> call = jsonPlaceHolderApi.getHolidays();
-        Log.d("Oops-Succeed", "Running GET");
-        call.enqueue(new Callback<Holidays>()
-        {
-            @Override
-            public void onResponse(Call<Holidays> call, Response<Holidays> response) {
-                if (!response.isSuccessful()) {
-                    Log.d("Oops-Succeed", String.valueOf(response.code()));
-                    return;
-                }
-                Holidays holiday = response.body();
-                if (holiday == null)
-                    publicHolidaysItemFromGoogle = null;
-                else
-                publicHolidaysItemFromGoogle = holiday.getItems();
-            }
-
-            @Override
-            public void onFailure(Call<Holidays> call, Throwable throwable) {
-                Log.d("Oops-Failure", throwable.getMessage());
-                publicHolidaysItemFromGoogle = null;
-            }
-        });
-
-        return publicHolidaysItemFromGoogle;
-        //String api_location = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/events?key=AIzaSyD2Xy5SVR22tomUkKkxKEGMIboLbAO0ATE";
-    }
 
     private String loadRegionDate() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -303,6 +260,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupListView.setAdapter(appliedHolidaysAdapter);
 
         buttonExitPopup.setOnClickListener(view -> dialog.dismiss());
+    }
+
+    protected void fetchHolidayListFromInternet() {
+
+        String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
+        // en.new_zealand#holiday@group.v.calendar.google.com')
+        Context context = this;
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BaseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
+        Call<Holidays> call = jsonPlaceHolderApi.getHolidays();
+        Log.d("Oops-Succeed", "Running GET");
+        call.enqueue(new Callback<Holidays>()
+        {
+            @Override
+            public void onResponse(Call<Holidays> call, Response<Holidays> response) {
+                if (!response.isSuccessful()) {
+                    Log.d("Oops-Succeed", String.valueOf(response.code()));
+                    return;
+                }
+                Holidays holiday = response.body();
+                if (holiday == null) {
+                    publicHolidaysItemFromGoogle = null;
+                    Log.d("Oops-Succeed", "Response empty");
+                    Toast.makeText(context, "Empty item - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
+                    LocalDate serveDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
+                    String[] deadlines = countDates(serveDate);
+                    displayDeadlines(deadlines);
+                }
+                else{
+                    Log.d("Oops-Succeed", "Success!!");
+                    publicHolidaysItemFromGoogle = holiday.getItems();
+                    LocalDate serveDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
+                    String[] deadlines = countDates(serveDate);
+                    displayDeadlines(deadlines);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Holidays> call, Throwable throwable) {
+                Log.d("Oops-Failure", throwable.getMessage());
+                publicHolidaysItemFromGoogle = null;
+                Toast.makeText(context, "Failed connection - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
+                LocalDate serveDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
+                String[] deadlines = countDates(serveDate);
+                displayDeadlines(deadlines);
+            }
+        });
+        //String api_location = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/events?key=AIzaSyD2Xy5SVR22tomUkKkxKEGMIboLbAO0ATE";
     }
 
     private class AppliedHolidaysAdapter extends BaseAdapter {
