@@ -4,34 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/Skwangles_Lavender_Blush"
     android:orientation="vertical"
-    android:background="@color/Skwangles_Lavendar_Blush"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/usage_info"
-        android:textSize="20sp"
-        android:textColor="@color/Skwangles_onyx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/enter_the_serving_date_the_clock_starts_from" />
+        android:text="@string/enter_the_serving_date_the_clock_starts_from"
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/Date_Format"
-        android:textSize="13sp"
-        android:textColor="@color/Skwangles_onyx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/date_format_information" />
+        android:text="@string/date_format_information"
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="13sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Spinner
-            android:id="@+id/day_served_spinner"
+            android:id="@+id/spinner_dayserved"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,7 +40,7 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
-            android:id="@+id/month_served_spinner"
+            android:id="@+id/spinner_monthserved"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -49,7 +49,7 @@
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Spinner
-            android:id="@+id/year_served_spinner"
+            android:id="@+id/spinner_yearserved"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -64,7 +64,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch_alternative_path"
+            android:id="@+id/switch_dateLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -80,29 +80,149 @@
             android:layout_height="10dp" />
 
         <Button
-            android:id="@+id/process_button"
+            android:id="@+id/button_processDates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="@color/Skwangles_onyx"
-            android:textColor="@color/white"
-            android:text="@string/process_button_name" />
+            android:text="@string/process_button_name"
+            android:textColor="@color/white" />
+
         <TextView
+            android:id="@+id/Process_warning_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/Process_warning_text"/>
+            android:layout_height="wrap_content" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="5dp" />
 
 
-
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="@color/Skwangles_onyx"/>
+        android:background="@color/Skwangles_onyx" />
+
+    <LinearLayout
+        android:id="@+id/switch_option_two_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#70A9A1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/seven_days_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Skwangles_secondary_rifle_green"
+            android:gravity="center"
+            android:text="Progress Payment Schedule - 17 Days Left:"
+            android:textColor="@color/Skwangles_Lavender_Blush"
+            android:textSize="20sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/result_seven_days_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/linearlayout_three_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/three_days_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/Skwangles_secondary_rifle_green"
+                android:gravity="center"
+                android:text="Principal Advise Deductions - 10 days left:"
+                android:textColor="@color/Skwangles_Lavender_Blush"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/result_seven_three_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/Skwangles_onyx"
+                android:textSize="18sp"
+                tools:text="5th August 2021" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/seven_three_two_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/Skwangles_secondary_rifle_green"
+                android:gravity="center"
+                android:text="Update - 12 days left:"
+                android:textColor="@color/Skwangles_Lavender_Blush"
+                android:textSize="20sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <TextView
+                android:id="@+id/result_seven_three_two_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/Skwangles_onyx"
+                android:textSize="18sp"
+                tools:text="5th August 2021" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <TextView
+            android:id="@+id/final_days_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Skwangles_secondary_rifle_green"
+            android:gravity="center"
+            android:text="Deadline - 0 days left:"
+            android:textColor="@color/Skwangles_Lavender_Blush"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/result_seventeen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -110,52 +230,21 @@
         android:layout_weight="1"
         android:background="#70A9A1">
 
-        <TextView
-            android:id="@+id/seven_days_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_alignParentTop="true"
-            android:text="@string/_7_days_result"
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/seven_days"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_below="@id/seven_days_info"
-            android:text=""
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/final_days_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/seven_days"
-            android:gravity="center"
-            android:text="@string/final_due_date_result"
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/three_weeks_plus_two"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_below="@id/final_days_info"
-            android:text=""
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="20sp" />
-
         <Button
-            android:id="@+id/change_region_button"
+            android:id="@+id/button_changeregion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:text="Change Region"
-            android:backgroundTint="@color/Skwangles_onyx"/>
+            android:backgroundTint="@color/Skwangles_onyx"
+            android:text="Change Region" />
+
+        <Button
+            android:id="@+id/button_showNonWorkingDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:backgroundTint="@color/Skwangles_onyx"
+            android:text="Non-working day \n Occurances" />
     </RelativeLayout>
 </LinearLayout>

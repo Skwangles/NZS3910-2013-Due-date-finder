@@ -79,6 +79,19 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1.8"></Space>
+        android:layout_weight="1"></Space>
 
+    <Button
+        android:id="@+id/Go_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/Skwangles_medium_aquamarine"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Go Back" />
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight=".2"></Space>
 </LinearLayout>

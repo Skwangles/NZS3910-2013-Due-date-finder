@@ -54,6 +54,10 @@ public class Item {
         return false;
     }
 
+    @Override
+    public String toString(){
+       return summary + " " + description + " " + start.toString();
+    }
 
     public String getSummary() {
         return summary;
@@ -65,10 +69,6 @@ public class Item {
 
     public Creator getCreator() {
         return creator;
-    }
-
-    public End getEnd() {
-        return end;
     }
 
     public Start getStart() {
@@ -131,6 +131,11 @@ class Start {
 
     public Start(String Date){
         this.Date = Date;
+    }
+
+    @Override
+    public String toString(){
+        return Date;
     }
 }
 
