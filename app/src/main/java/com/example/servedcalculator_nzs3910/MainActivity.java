@@ -3,6 +3,7 @@ package com.example.servedcalculator_nzs3910;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +27,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonChangeMyRegion;
     Button buttonShowNonWorkingDays;
     String regionOfHolidays;
-    List<Item> publicHolidaysItemFromGoogle;
     SwitchMaterial switchBetweenResultLayout;
     ListView popupListView;
+    List<Item> publicHolidaysItemFromGoogle;
     private ArrayList<PublicHolidays> appliedPublicHolidays = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Setup of Spinners-------
         spinnerSetup();
 
-        fetchHolidayListFromInternet(); //Gets the list of public holidays in NZ
-
+        publicHolidaysItemFromGoogle = fetchHolidayListFromInternet(); //Gets the list of public holidays in NZ
+        if (publicHolidaysItemFromGoogle == null){
+            Toast.makeText(this, "Issue occurred with getting from Google", Toast.LENGTH_SHORT).show();
+        }
         buttonSetup(); //Sets up event listeners and spinner adapters
 
     }
@@ -107,18 +109,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonProcessDates.setOnClickListener(this);
         buttonChangeMyRegion.setOnClickListener(this);
         buttonShowNonWorkingDays.setOnClickListener(this);
-        switchBetweenResultLayout.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //Switches to display the layout
-                saveSwitchStatus();
-                if (switchBetweenResultLayout.isChecked()) {
-                    LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
-                    option1.setVisibility(View.VISIBLE);
-                } else {
-                    LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
-                    option1.setVisibility(View.GONE);
-                }
+        switchBetweenResultLayout.setOnCheckedChangeListener((compoundButton, b) -> {
+            //Switches to display the layout
+            saveSwitchStatus();
+            if (switchBetweenResultLayout.isChecked()) {
+                LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
+                option1.setVisibility(View.VISIBLE);
+            } else {
+                LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
+                option1.setVisibility(View.GONE);
             }
         });
     }
@@ -203,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             appliedPublicHolidays.add(new PublicHolidays(date, 0));
             return true;
         }
-        List<PublicHolidays> publicHolidaysList = getListOfPublicHolidays();
+        List<PublicHolidays> publicHolidaysList = getListOfPublicHolidays(publicHolidaysItemFromGoogle);
         if (date.getMonth().getValue() == 12 && date.getDayOfMonth() >= 24){ //Checks for Christmas Dates
             appliedPublicHolidays.add(new PublicHolidays(date, 1));
             return true;
@@ -221,33 +220,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    protected List<PublicHolidays> getListOfPublicHolidays() {
+    protected List<PublicHolidays> getListOfPublicHolidays(List<Item> publicHolidaysItemFromGoogle) {
         List<PublicHolidays> publicHolidays = new ArrayList<PublicHolidays>();
         for (int i = 0; i < publicHolidaysItemFromGoogle.size(); i++) {
-            if (publicHolidaysItemFromGoogle.get(i).getDescription().equals("Public holiday")) {
-                Log.d("MyErrors", publicHolidaysItemFromGoogle.get(i).toString());
-                publicHolidays.add(new PublicHolidays(publicHolidaysItemFromGoogle.get(i)));//gets Nation holidays
+            Item currentItem = publicHolidaysItemFromGoogle.get(i);
+            if (currentItem.getDescription().equals("Public holiday")) {
+                publicHolidays.add(new PublicHolidays(currentItem));//gets Nation holidays
             }
-            if (!loadRegionDate().equals("") && publicHolidaysItemFromGoogle.get(i).getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
-                publicHolidays.add(new PublicHolidays(publicHolidaysItemFromGoogle.get(i)));
+            else if (!loadRegionDate().equals("") && currentItem.getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
+                publicHolidays.add(new PublicHolidays(currentItem));//adds
             }
         }
         return publicHolidays;
     }
 
     //Gets the list of public holidays from Google
-    protected void fetchHolidayListFromInternet() {
+    protected List<Item> fetchHolidayListFromInternet() {
 
-        // Base URL https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/
+        String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
         // en.new_zealand#holiday@group.v.calendar.google.com')
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/")
+                .baseUrl(BaseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
         Call<Holidays> call = jsonPlaceHolderApi.getHolidays();
-        call.enqueue(new Callback<Holidays>() {
+        Log.d("Oops-Succeed", "Running GET");
+        call.enqueue(new Callback<Holidays>()
+        {
             @Override
             public void onResponse(Call<Holidays> call, Response<Holidays> response) {
                 if (!response.isSuccessful()) {
@@ -255,7 +256,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 Holidays holiday = response.body();
-                Log.d("HolidayPrintout", holiday.getItems().toString());
                 publicHolidaysItemFromGoogle = holiday.getItems();
             }
 
@@ -265,6 +265,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 publicHolidaysItemFromGoogle = null;
             }
         });
+
+        return publicHolidaysItemFromGoogle;
         //String api_location = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/events?key=AIzaSyD2Xy5SVR22tomUkKkxKEGMIboLbAO0ATE";
     }
 

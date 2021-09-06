@@ -56,7 +56,7 @@ public class Item {
 
     @Override
     public String toString(){
-       return summary + " " + description + " " + start.toString();
+       return description + " " + start.toString();
     }
 
     public String getSummary() {
@@ -65,10 +65,6 @@ public class Item {
 
     public String getDescription() {
         return description;
-    }
-
-    public Creator getCreator() {
-        return creator;
     }
 
     public Start getStart() {
@@ -135,14 +131,14 @@ class Start {
 
     @Override
     public String toString(){
-        return Date;
+        return date;
     }
 }
 
 class End {
-    private String Date;
-    public End(String Date){
-        this.Date = Date;
+    private String date;
+    public End(String date){
+        this.date = date;
     }
 }
 
