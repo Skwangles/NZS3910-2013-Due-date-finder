@@ -3,7 +3,6 @@ package com.example.servedcalculator_nzs3910;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -27,6 +25,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -125,10 +124,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] day_items = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
         String[] month_items = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         java.util.Calendar setupCalendar = java.util.Calendar.getInstance();
-        java.util.Calendar today = java.util.Calendar.getInstance();
-        int year = setupCalendar.get(today.YEAR);
-        int day = setupCalendar.get(today.DAY_OF_MONTH);
-        int month = setupCalendar.get(today.MONTH);
+        int year = setupCalendar.get(Calendar.YEAR);
+        int day = setupCalendar.get(Calendar.DAY_OF_MONTH);
+        int month = setupCalendar.get(Calendar.MONTH);
         String[] years_items = new String[3];
         for (int i = 0; i < 3; i++) {
             years_items[i] = String.valueOf(year - 1 + i);
@@ -221,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected List<PublicHolidays> getListOfPublicHolidays(List<Item> publicHolidaysItemFromGoogle) {
-        List<PublicHolidays> publicHolidays = new ArrayList<PublicHolidays>();
+        List<PublicHolidays> publicHolidays = new ArrayList<>();
         for (int i = 0; i < publicHolidaysItemFromGoogle.size(); i++) {
             Item currentItem = publicHolidaysItemFromGoogle.get(i);
             if (currentItem.getDescription().equals("Public holiday")) {
@@ -240,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
         // en.new_zealand#holiday@group.v.calendar.google.com')
 
-        Retrofit retrofit = new Retrofit.Builder()
+        final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BaseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -256,6 +254,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 Holidays holiday = response.body();
+                if (holiday == null)
+                    publicHolidaysItemFromGoogle = null;
+                else
                 publicHolidaysItemFromGoogle = holiday.getItems();
             }
 
@@ -301,12 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AppliedHolidaysAdapter appliedHolidaysAdapter = new AppliedHolidaysAdapter(this, appliedPublicHolidays);
         popupListView.setAdapter(appliedHolidaysAdapter);
 
-        buttonExitPopup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+        buttonExitPopup.setOnClickListener(view -> dialog.dismiss());
     }
 
     private class AppliedHolidaysAdapter extends BaseAdapter {
@@ -338,8 +334,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = inflater.inflate(R.layout.main_row, viewGroup, false);
 
-            TextView largeText = (TextView) row.findViewById(R.id.larger_item);
-            TextView smallText = (TextView) row.findViewById(R.id.smaller_item);
+            TextView largeText = row.findViewById(R.id.larger_item);
+            TextView smallText = row.findViewById(R.id.smaller_item);
 
             largeText.setText(appliedPublicHolidays.get(position).getName());
             smallText.setText("  " + dtf.format(appliedPublicHolidays.get(position).getStart()));
