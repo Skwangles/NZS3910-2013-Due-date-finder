@@ -1,13 +1,13 @@
-package com.example.servedcalculator_nzs3910;
+package com.skwangles.servedcalculator_nzs3910;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -43,9 +43,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String INDEXDATES = "selectedSpinnerIndex";
     final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM uuuu", Locale.ENGLISH); //Layout of Dates
     ArrayList<PublicHolidays> impactingPublicHolidays = new ArrayList<>();
-    AlertDialog.Builder dialogBuilder;
-    AlertDialog dialog;
+    AlertDialog.Builder listViewDialogBuilder;
+    AlertDialog.Builder infoDialogBuilder;
+    AlertDialog listViewDialog;
+    AlertDialog informationDialog;
     Button buttonExitPopup;
+    Button buttonExitInfoPopup;
+    Button buttonShowInformation;
     Spinner spinnerOfDay;
     Spinner spinnerOfMonth;
     Spinner spinnerOfYear;
@@ -64,13 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (loadRegionDate().equals("")) {
-            startSetupActivity();
-        }
-        getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
-        Intent intent = getIntent();
+
+        Intent intent = getIntent(); //gets the current session date from the region activity
         if (intent.getExtras() != null) {
             intArr = intent.getIntArrayExtra(INDEXDATES);
             selectedDayIndex = intArr[0];
@@ -93,12 +94,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonChangeMyRegion = findViewById(R.id.button_changeregion);
         switchBetweenResultLayout = findViewById(R.id.switch_dateLayout);
         buttonShowNonWorkingDays = findViewById(R.id.button_showNonWorkingDays);
-
+        buttonShowInformation = findViewById(R.id.button_definitions);
         // Setup of Spinners-------
         spinnerSetup();
-
+        if (loadRegionDate().equals("")) {//saving time, switches immediately
+            startSetupActivity();
+        }
         buttonSetup(); //Sets up event listeners and spinner adapters
-        Toast.makeText(this, String.valueOf(selectedDayIndex), Toast.LENGTH_SHORT).show();
+
+        //setup finished
     }
 
 
@@ -113,7 +117,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startSetupActivity();
             }
             if (id == R.id.button_showNonWorkingDays) {
-                makeAndDisplayPopup();
+                makeAndDisplayListViewPopup();
+            }
+            if (id == R.id.button_definitions){
+                makeAndDisplayInformationPopup();
             }
         }
     }
@@ -122,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonProcessDates.setOnClickListener(this);
         buttonChangeMyRegion.setOnClickListener(this);
         buttonShowNonWorkingDays.setOnClickListener(this);
+        buttonShowInformation.setOnClickListener(this);
         switchBetweenResultLayout.setOnCheckedChangeListener((compoundButton, b) -> {
             //Switches to display the layout
             saveSwitchStatus();
@@ -247,18 +255,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         impactingPublicHolidays = new ArrayList<>(); //Resets the numbers to be empty for the isPublicOrWeekend
         int workingDays = 17 + 7; //Fixed term length
         String[] WorkingDates = new String[4]; // 4 important dates
-        while (workingDays > 0) {
+        while (workingDays >= 0) {
             if (!isPublicOrWeekend(workingDate, publicHolidaysList, impactingPublicHolidays)) {
-                if (workingDays == 17) {
+                workingDays--;//only decrements when considering actual working days
+                Log.d("WorkingDays", workingDate.toString() + " " + workingDays);
+                if (workingDays == 17) { //Numbers apply themselves, 1 cycle behind.
                     WorkingDates[0] = dtf.format(workingDate); // 7th day
                 } else if (workingDays == 14) {
                     WorkingDates[1] = dtf.format(workingDate); // 7 + 3rd day
                 } else if (workingDays == 12) {
                     WorkingDates[2] = dtf.format(workingDate); // 7 + 3 + 2nd day
-                } else if (workingDays == 1) {
+                } else if (workingDays == 0) {
                     WorkingDates[3] = dtf.format(workingDate); // Final Day (7 + 17th day)
                 }
-                workingDays--; //Only decrements when Workdays are considered
+
             }
             workingDate = workingDate.plusDays(1); //Moves forward a day
         }
@@ -320,21 +330,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editor.apply();
     }
 
-    private void makeAndDisplayPopup() {
-        dialogBuilder = new AlertDialog.Builder(this);
+    private void makeAndDisplayListViewPopup() {//creates the NonWorking Days Listview popup
+        listViewDialogBuilder = new AlertDialog.Builder(this);
 
         //Formats the dialog
         final View popupView = getLayoutInflater().inflate(R.layout.popup, null);
         buttonExitPopup = popupView.findViewById(R.id.popup_exit);
         popupListView = popupView.findViewById(R.id.popup_listview);
         //Displays the Dialog
-        dialogBuilder.setView(popupView);
-        dialog = dialogBuilder.create();
-        dialog.show();
+        listViewDialogBuilder.setView(popupView);
+        listViewDialog = listViewDialogBuilder.create();
+        listViewDialog.show();
         AppliedHolidaysAdapter appliedHolidaysAdapter = new AppliedHolidaysAdapter(this, impactingPublicHolidays);
         popupListView.setAdapter(appliedHolidaysAdapter);
 
-        buttonExitPopup.setOnClickListener(view -> dialog.dismiss());
+        buttonExitPopup.setOnClickListener(view -> listViewDialog.dismiss());
+    }
+
+    private void makeAndDisplayInformationPopup() { //Makes the important information popup
+        infoDialogBuilder = new AlertDialog.Builder(this);
+
+        //Formats the dialog
+        final View popupView = getLayoutInflater().inflate(R.layout.information_popup, null);
+        buttonExitInfoPopup = popupView.findViewById(R.id.information_exitbutton);
+        //Displays the Dialog
+        infoDialogBuilder.setView(popupView);
+        informationDialog = infoDialogBuilder.create();
+        informationDialog.show();//Shows the popup
+        buttonExitInfoPopup.setOnClickListener(view -> informationDialog.dismiss());//closes the dialog on click
     }
 
     protected void fetchHolidayListFromInternet() {

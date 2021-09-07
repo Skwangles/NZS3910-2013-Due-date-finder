@@ -1,4 +1,4 @@
-package com.example.servedcalculator_nzs3910;
+package com.skwangles.servedcalculator_nzs3910;
 
 import android.content.Context;
 

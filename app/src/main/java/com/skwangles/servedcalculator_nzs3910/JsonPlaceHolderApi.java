@@ -1,6 +1,4 @@
-package com.example.servedcalculator_nzs3910;
-
-import java.util.List;
+package com.skwangles.servedcalculator_nzs3910;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

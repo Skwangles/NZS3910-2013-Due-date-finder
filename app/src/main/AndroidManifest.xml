@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.servedcalculator_nzs3910"
+    package="com.skwangles.servedcalculator_nzs3910"
     android:versionCode="1"
     android:versionName="InitialRelease">
 
@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ServedCalculatorNZS3910">
         <activity
-            android:name=".RegionSelect"
+            android:name="com.skwangles.servedcalculator_nzs3910.RegionSelect"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.skwangles.servedcalculator_nzs3910.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
