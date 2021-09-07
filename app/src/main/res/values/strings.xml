@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NZS3910:2013 Progress Payment Schedule</string>
+    <string name="app_name">NZS3910:2013 Payment Schedule</string>
     <string name="_7_17_days">Basic Dates</string>
     <string name="_7_3_2_5_days">Extra Dates</string>
     <string name="enter_the_serving_date_the_clock_starts_from">Enter the Official SERVING Date</string>
