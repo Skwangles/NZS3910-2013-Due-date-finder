@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.servedcalculator_nzs3910">
+    package="com.example.servedcalculator_nzs3910"
+    android:versionCode="1"
+    android:versionName="InitialRelease">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

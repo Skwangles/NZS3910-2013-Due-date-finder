@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -66,7 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (loadRegionDate().equals("")) {
             startSetupActivity();
         }
+        getSupportActionBar().hide();
 
+        setContentView(R.layout.activity_main);
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             intArr = intent.getIntArrayExtra(INDEXDATES);
@@ -76,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
 
-        setContentView(R.layout.activity_main);
+
+
         regionOfHolidays = loadRegionDate();
         Toast.makeText(this, "Region: " + regionOfHolidays, Toast.LENGTH_SHORT).show();
 

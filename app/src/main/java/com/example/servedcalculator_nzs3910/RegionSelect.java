@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -28,6 +29,7 @@ public class RegionSelect extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_region_select);
         proceed = findViewById(R.id.Complete_setup);
         region_select_spinner = findViewById(R.id.region_selection_spinner);
