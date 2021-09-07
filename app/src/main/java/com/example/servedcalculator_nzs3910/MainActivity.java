@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,13 +162,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerOfMonth.setAdapter(month_adapter);
         ArrayAdapter<String> year_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, years_items);
         spinnerOfYear.setAdapter(year_adapter);
-        Log.d("SuccessLog", day + " " + month);
         //The following checks changes in the spinner selection
         spinnerOfDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedDayIndex = spinnerOfDay.getSelectedItemPosition();
-                Log.d("Index check", String.valueOf(selectedDayIndex));
             }
 
             @Override
@@ -205,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setSpinnerSelection(int day, int month) {
-        Log.d("Index check 2", String.valueOf(spinnerOfDay.getCount()));
         if (selectedDayIndex < spinnerOfDay.getCount()){
             spinnerOfDay.setSelection(selectedDayIndex);}
         else {
@@ -349,21 +345,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .build();
             JsonPlaceHolderApi jsonPlaceHolderApi = retrofit.create(JsonPlaceHolderApi.class);
             Call<Holidays> call = jsonPlaceHolderApi.getHolidays();
-            Log.d("Oops-Succeed", "Running GET");
             call.enqueue(new Callback<Holidays>() {
                 @Override
                 public void onResponse(Call<Holidays> call, Response<Holidays> response) {
                     if (!response.isSuccessful()) {
-                        Log.d("Oops-Succeed", String.valueOf(response.code()));
                         return;
                     }
                     Holidays holiday = response.body();
                     if (holiday == null) {
                         publicHolidaysItemFromGoogle = null;
-                        Log.d("Oops-Succeed", "Response empty");
                         Toast.makeText(context, "Empty item - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
                     } else {
-                        Log.d("Oops-Succeed", "Success!!");
                         publicHolidaysItemFromGoogle = holiday.getItems();
                     }
                     runCalculations();
@@ -372,7 +364,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailure(Call<Holidays> call, Throwable throwable) {
-                    Log.d("Oops-Failure", throwable.getMessage());
                     publicHolidaysItemFromGoogle = null;
                     Toast.makeText(context, "Failed connection - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
                     runCalculations();
@@ -428,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             TextView smallText = row.findViewById(R.id.smaller_item);
 
             largeText.setText(appliedPublicHolidays.get(position).getName());
-            smallText.setText("  " + dtf.format(appliedPublicHolidays.get(position).getStart()));
+            smallText.setText(dtf.format(appliedPublicHolidays.get(position).getStart()));
 
 
             return row;
