@@ -1,27 +1,23 @@
 package com.example.servedcalculator_nzs3910;
 
-import android.util.Log;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Locale;
 
 public class PublicHolidays {
     private LocalDate start;
     private String name;
-    private String type;
+    private final String type;
 
-    public PublicHolidays(Item item){
+    public PublicHolidays(Item item) {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         this.name = item.getSummary();
         this.type = item.getDescription();
         this.start = LocalDate.parse(item.getStart().getDate(), parser);
+        this.start = longWeekendCase();
     }
 
-    public PublicHolidays(LocalDate otherEvent, int type){
+    public PublicHolidays(LocalDate otherEvent, int type) {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         if (type == 0) {
             if (otherEvent.getDayOfWeek().getValue() == 7) {
@@ -31,17 +27,27 @@ public class PublicHolidays {
             }
             this.type = "Weekend";
 
-        }
-        else if (type == 1) {
+        } else if (type == 1) {
             this.name = "Christmas Break";
             this.type = "Christmas Break";
 
-        }
-        else{
+        } else {
             this.name = "Unspecified";
             this.type = "Unspecified";
         }
         this.start = otherEvent;
+    }
+
+    public LocalDate longWeekendCase() {
+        if (start.getDayOfWeek().getValue() == 6) {
+            name += " - Long Weekend";
+            return this.start.plusDays(2);
+        } else if (start.getDayOfWeek().getValue() == 7) {
+            name += " - Long Weekend";
+            return this.start.plusDays(1);
+        }
+        return this.start;
+
     }
 
     public LocalDate getStart() {

@@ -19,10 +19,11 @@ import android.widget.Toast;
 public class RegionSelect extends AppCompatActivity implements View.OnClickListener {
     public static final String SHARED_PREFS = "NZS3910-Region";
     public static final String REGION = "WhereAreYou";
+    public static final String INDEXDATES = "selectedSpinnerIndex";
     Button proceed;
     Spinner region_select_spinner;
     Button goBack;
-
+    int[] currentDateSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class RegionSelect extends AppCompatActivity implements View.OnClickListe
         region_select_spinner = findViewById(R.id.region_selection_spinner);
         goBack = findViewById(R.id.Go_back);
         TextView preselected = findViewById(R.id.previous_region);
-
+        currentDateSelected = getIntent().getIntArrayExtra(INDEXDATES);
         spinnerSetup();
 
         if (loadData().equals("")) {//Sets the text based on the region, as well as the GO BACK button
@@ -92,6 +93,7 @@ public class RegionSelect extends AppCompatActivity implements View.OnClickListe
 
     private void switchActivities() {
         Intent myIntent = new Intent(RegionSelect.this, MainActivity.class);
+        myIntent.putExtra(INDEXDATES, currentDateSelected);
         RegionSelect.this.startActivity(myIntent);
     }
 
