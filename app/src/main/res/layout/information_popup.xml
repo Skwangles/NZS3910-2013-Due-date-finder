@@ -5,7 +5,8 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/Skwangles_light_orange">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -18,7 +19,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Skwangles_light_orange"
+            android:background="@color/Skwangles_Turquoise"
             android:gravity="center"
             android:text="@string/KeyDefinitions"
             android:textColor="@color/Skwangles_onyx"
