@@ -37,17 +37,28 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //Shared Pref keys
     public static final String SHARED_PREFS = "NZS3910-Region";
-    public static final String USERREGION = "WhereAreYou";
-    public static final String SWITCHSTATE = "Layout";
-    public static final String INDEXDATES = "selectedSpinnerIndex";
-    final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM uuuu", Locale.ENGLISH); //Layout of Dates
-    ArrayList<PublicHolidays> impactingPublicHolidays = new ArrayList<>();
-    AlertDialog.Builder listViewDialogBuilder;
+    public static final String USER_REGION = "WhereAreYou";
+    public static final String SWITCH_STATE = "Layout";
+    public static final String SPINNER_INDEX = "selectedSpinnerIndex";
+
+    final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu", Locale.ENGLISH); //Layout of Dates
+
+    //Popup Makers
+    AlertDialog.Builder excludedDatesDialogBuilder;
     AlertDialog.Builder infoDialogBuilder;
-    AlertDialog listViewDialog;
+    AlertDialog excludedDatesDialog;
     AlertDialog informationDialog;
-    Button buttonExitPopup;
+
+    //Important Info
+    ArrayList<PublicHolidays> excludedDatesArrayList = new ArrayList<>();
+    ListView popupListView;
+    List<Item> publicHolidaysItemFromGoogle;
+
+    //Activity Views
+    Button buttonExitExcludedDatesPopup;
     Button buttonExitInfoPopup;
     Button buttonShowInformation;
     Spinner spinnerOfDay;
@@ -58,33 +69,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonShowNonWorkingDays;
     String regionOfHolidays;
     SwitchMaterial switchBetweenResultLayout;
-    ListView popupListView;
-    List<Item> publicHolidaysItemFromGoogle;
-    int selectedDayIndex = 99;
-    int selectedMonthIndex = 99;
-    int selectedYearIndex = 99;
-    int[] intArr = new int[]{99, 99, 99};
+
+    // Spinner Selections
+    int[] selectedSpinnerIndexes = new int[]{99, 99, 99};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-
-        Intent intent = getIntent(); //gets the current session date from the region activity
-        if (intent.getExtras() != null) {
-            intArr = intent.getIntArrayExtra(INDEXDATES);
-            selectedDayIndex = intArr[0];
-            selectedMonthIndex = intArr[1];
-            selectedYearIndex = intArr[2];
+        if (loadRegionDateFromSharedPref().equals("")) {
+            startRegionSelectActivity();
         }
 
-
-
-
-        regionOfHolidays = loadRegionDate();
-        Toast.makeText(this, "Region: " + regionOfHolidays, Toast.LENGTH_SHORT).show();
-
+        setContentView(R.layout.activity_main);
 
         //Defines each of the objects
         spinnerOfDay = findViewById(R.id.spinner_dayserved);
@@ -94,45 +91,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonChangeMyRegion = findViewById(R.id.button_changeregion);
         switchBetweenResultLayout = findViewById(R.id.switch_dateLayout);
         buttonShowNonWorkingDays = findViewById(R.id.button_showNonWorkingDays);
-        buttonShowInformation = findViewById(R.id.button_definitions);
-        // Setup of Spinners-------
-        spinnerSetup();
-        if (loadRegionDate().equals("")) {//saving time, switches immediately
-            startSetupActivity();
+
+
+        //Get additional Information
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            selectedSpinnerIndexes = intent.getIntArrayExtra(SPINNER_INDEX);
+            saveSpinnerIndexToVariable();
         }
-        buttonSetup(); //Sets up event listeners and spinner adapters
+
+        //Gets and notifies of globally stored Region of User.
+        regionOfHolidays = loadRegionDateFromSharedPref();
+        Toast.makeText(this, "Region: " + regionOfHolidays, Toast.LENGTH_SHORT).show();
+
+        // Setup of Spinners-------
+        spinnerAdapterAndStateSetup();
+
+
+        buttonAndSwitchEventsSetup(); //Sets up event listeners and spinner adapters
 
         //setup finished
     }
-
 
     @Override
     public void onClick(View view) {
         if (view != null) {
             int id = view.getId();
             if (id == R.id.button_processDates) {
-                fetchHolidayListFromInternet();//Will fetch and wait asynchronously
+                fetchHolidayListFromGoogle();//Will fetch and wait asynchronously
             }
             if (id == R.id.button_changeregion) {
-                startSetupActivity();
+                startRegionSelectActivity();
             }
             if (id == R.id.button_showNonWorkingDays) {
-                makeAndDisplayListViewPopup();
+                makeAndDisplayExcludedDatesPopup();
             }
-            if (id == R.id.button_definitions){
+            if (id == R.id.button_definitions) {
                 makeAndDisplayInformationPopup();
             }
         }
     }
 
-    private void buttonSetup() {
+    private void buttonAndSwitchEventsSetup() {
         buttonProcessDates.setOnClickListener(this);
         buttonChangeMyRegion.setOnClickListener(this);
         buttonShowNonWorkingDays.setOnClickListener(this);
         buttonShowInformation.setOnClickListener(this);
         switchBetweenResultLayout.setOnCheckedChangeListener((compoundButton, b) -> {
             //Switches to display the layout
-            saveSwitchStatus();
+            saveSwitchStatusToSharedPref();
             if (switchBetweenResultLayout.isChecked()) {
                 LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
                 option1.setVisibility(View.VISIBLE);
@@ -143,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void spinnerSetup() {
+    private void spinnerAdapterAndStateSetup() {
         String[] day_items = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"};
         String[] month_items = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
         java.util.Calendar setupCalendar = java.util.Calendar.getInstance();
@@ -156,8 +163,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }//Gets the three surrounding years
 
         //Sets up the layout of the result
-        switchBetweenResultLayout.setChecked(loadSwitchStatus());
-        saveSwitchStatus();
+        switchBetweenResultLayout.setChecked(loadSwitchStatusFromSharedPref());
+        saveSwitchStatusToSharedPref();
         if (switchBetweenResultLayout.isChecked()) {
             LinearLayout option1 = findViewById(R.id.linearlayout_three_two);
             option1.setVisibility(View.VISIBLE);
@@ -178,17 +185,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerOfDay.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedDayIndex = spinnerOfDay.getSelectedItemPosition();
+                selectedSpinnerIndexes[0] = spinnerOfDay.getSelectedItemPosition();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                 }
+            }
         });
         spinnerOfMonth.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedMonthIndex = spinnerOfMonth.getSelectedItemPosition();
+                selectedSpinnerIndexes[1] = spinnerOfMonth.getSelectedItemPosition();
             }
 
             @Override
@@ -199,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerOfYear.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedYearIndex = spinnerOfYear.getSelectedItemPosition();
+                selectedSpinnerIndexes[2] = spinnerOfYear.getSelectedItemPosition();
             }
 
             @Override
@@ -208,32 +215,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        setSpinnerSelection(day, month);
+        setSpinnerSelections(day, month);
 
         // -- End of setup --------
     }
 
-    private void setSpinnerSelection(int day, int month) {
-        if (selectedDayIndex < spinnerOfDay.getCount()){
-            spinnerOfDay.setSelection(selectedDayIndex);}
-        else {
+    private void setSpinnerSelections(int day, int month) {
+        if (selectedSpinnerIndexes[0] < spinnerOfDay.getCount()) {
+            spinnerOfDay.setSelection(selectedSpinnerIndexes[0]);
+        } else {
             spinnerOfDay.setSelection(day - 1);
         }
-        if (selectedMonthIndex < spinnerOfMonth.getCount()){
-            spinnerOfMonth.setSelection(selectedMonthIndex);}
-        else {
+        if (selectedSpinnerIndexes[1] < spinnerOfMonth.getCount()) {
+            spinnerOfMonth.setSelection(selectedSpinnerIndexes[1]);
+        } else {
             spinnerOfMonth.setSelection(month);
         }
-        if (selectedYearIndex < spinnerOfYear.getCount()) {
-            spinnerOfYear.setSelection(selectedYearIndex);
-        }
-        else {
+        if (selectedSpinnerIndexes[2] < spinnerOfYear.getCount()) {
+            spinnerOfYear.setSelection(selectedSpinnerIndexes[2]);
+        } else {
             spinnerOfYear.setSelection(1);
         }
 
     }
 
-    private void displayDeadlines(String[] deadlines) {
+    private void setDeadlineTextViewValues(String[] deadlines) {
         TextView seven = findViewById(R.id.result_seven_days_1);
         TextView three = findViewById(R.id.result_seven_three_days);
         TextView two = findViewById(R.id.result_seven_three_two_days);
@@ -244,29 +250,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         finalResult.setText(deadlines[3]);
     }
 
-    private void startSetupActivity() {
+    private void startRegionSelectActivity() {
         Intent myIntent = new Intent(MainActivity.this, RegionSelect.class);
-        myIntent.putExtra(INDEXDATES, new int[]{spinnerOfDay.getSelectedItemPosition(), spinnerOfMonth.getSelectedItemPosition(), spinnerOfYear.getSelectedItemPosition()});
+        myIntent.putExtra(SPINNER_INDEX, selectedSpinnerIndexes);
         MainActivity.this.startActivity(myIntent);
     }
 
-    private String[] countDates(LocalDate workingDate) {
+    private String[] calculateDeadlinesInWorkingDays(LocalDate workingDate) {
         List<PublicHolidays> publicHolidaysList = fromItemListGetPublicHolidays(publicHolidaysItemFromGoogle);
-        impactingPublicHolidays = new ArrayList<>(); //Resets the numbers to be empty for the isPublicOrWeekend
+        excludedDatesArrayList = new ArrayList<>(); //Resets the numbers to be empty for the isPublicOrWeekend
         int workingDays = 17 + 7; //Fixed term length
         String[] WorkingDates = new String[4]; // 4 important dates
         while (workingDays >= 0) {
-            if (!isPublicOrWeekend(workingDate, publicHolidaysList, impactingPublicHolidays)) {
+            if (!isPublicOrWeekend(workingDate, publicHolidaysList, excludedDatesArrayList)) {
                 workingDays--;//only decrements when considering actual working days
                 Log.d("WorkingDays", workingDate.toString() + " " + workingDays);
                 if (workingDays == 17) { //Numbers apply themselves, 1 cycle behind.
-                    WorkingDates[0] = dtf.format(workingDate); // 7th day
+                    WorkingDates[0] = dateTimeFormatter.format(workingDate); // 7th day
                 } else if (workingDays == 14) {
-                    WorkingDates[1] = dtf.format(workingDate); // 7 + 3rd day
+                    WorkingDates[1] = dateTimeFormatter.format(workingDate); // 7 + 3rd day
                 } else if (workingDays == 12) {
-                    WorkingDates[2] = dtf.format(workingDate); // 7 + 3 + 2nd day
+                    WorkingDates[2] = dateTimeFormatter.format(workingDate); // 7 + 3 + 2nd day
                 } else if (workingDays == 0) {
-                    WorkingDates[3] = dtf.format(workingDate); // Final Day (7 + 17th day)
+                    WorkingDates[3] = dateTimeFormatter.format(workingDate); // Final Day (7 + 17th day)
                 }
 
             }
@@ -303,48 +309,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Item currentItem = publicHolidaysItemFromGoogle.get(i);
             if (currentItem.getDescription().equals("Public holiday")) {
                 publicHolidays.add(new PublicHolidays(currentItem));//gets Nation holidays
-            } else if (!loadRegionDate().equals("") && currentItem.getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
+            } else if (!loadRegionDateFromSharedPref().equals("") && currentItem.getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
                 publicHolidays.add(new PublicHolidays(currentItem));//adds
             }
         }
         return publicHolidays;
     }
 
-    //Gets the list of public holidays from Google
-
-
-    private String loadRegionDate() {
+    private String loadRegionDateFromSharedPref() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getString(USERREGION, "");
+        return sharedPreferences.getString(USER_REGION, "");
     }
 
-    private boolean loadSwitchStatus() {
+    private boolean loadSwitchStatusFromSharedPref() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        return sharedPreferences.getBoolean(SWITCHSTATE, false);
+        return sharedPreferences.getBoolean(SWITCH_STATE, false);
     }
 
-    private void saveSwitchStatus() {
+    private void saveSwitchStatusToSharedPref() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(SWITCHSTATE, switchBetweenResultLayout.isChecked());
+        editor.putBoolean(SWITCH_STATE, switchBetweenResultLayout.isChecked());
         editor.apply();
     }
 
-    private void makeAndDisplayListViewPopup() {//creates the NonWorking Days Listview popup
-        listViewDialogBuilder = new AlertDialog.Builder(this);
+    private void saveSpinnerIndexToVariable() {
+        if (spinnerOfDay == null || spinnerOfMonth == null || spinnerOfYear == null)
+            return;
+        selectedSpinnerIndexes = new int[]{spinnerOfDay.getSelectedItemPosition(), spinnerOfMonth.getSelectedItemPosition(), spinnerOfYear.getSelectedItemPosition()};
+    }
+
+    private void makeAndDisplayExcludedDatesPopup() {//creates the NonWorking Days Listview popup
+        excludedDatesDialogBuilder = new AlertDialog.Builder(this);
 
         //Formats the dialog
         final View popupView = getLayoutInflater().inflate(R.layout.popup, null);
-        buttonExitPopup = popupView.findViewById(R.id.popup_exit);
+        buttonExitExcludedDatesPopup = popupView.findViewById(R.id.popup_exit);
         popupListView = popupView.findViewById(R.id.popup_listview);
         //Displays the Dialog
-        listViewDialogBuilder.setView(popupView);
-        listViewDialog = listViewDialogBuilder.create();
-        listViewDialog.show();
-        AppliedHolidaysAdapter appliedHolidaysAdapter = new AppliedHolidaysAdapter(this, impactingPublicHolidays);
-        popupListView.setAdapter(appliedHolidaysAdapter);
+        excludedDatesDialogBuilder.setView(popupView);
+        excludedDatesDialog = excludedDatesDialogBuilder.create();
+        excludedDatesDialog.show();
+        ExcludedDatesAdapter excludedDatesAdapter = new ExcludedDatesAdapter(this, excludedDatesArrayList);
+        popupListView.setAdapter(excludedDatesAdapter);
 
-        buttonExitPopup.setOnClickListener(view -> listViewDialog.dismiss());
+        buttonExitExcludedDatesPopup.setOnClickListener(view -> excludedDatesDialog.dismiss());//closes window upon button press
     }
 
     private void makeAndDisplayInformationPopup() { //Makes the important information popup
@@ -360,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonExitInfoPopup.setOnClickListener(view -> informationDialog.dismiss());//closes the dialog on click
     }
 
-    protected void fetchHolidayListFromInternet() {
+    protected void fetchHolidayListFromGoogle() {
 
         String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
         // en.new_zealand#holiday@group.v.calendar.google.com')
@@ -385,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         publicHolidaysItemFromGoogle = holiday.getItems();
                     }
-                    runCalculations();
+                    runDateCalculationProcesses();
 
                 }
 
@@ -393,31 +402,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onFailure(Call<Holidays> call, Throwable throwable) {
                     publicHolidaysItemFromGoogle = null;
                     Toast.makeText(context, "Failed connection - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
-                    runCalculations();
+                    runDateCalculationProcesses();
 
                 }
             });
         } else {
-            runCalculations();
+            runDateCalculationProcesses();
         }
         //String api_location = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/events?key=AIzaSyD2Xy5SVR22tomUkKkxKEGMIboLbAO0ATE";
     }
 
-    private void runCalculations() {
+    private void runDateCalculationProcesses() {
         try {
-            LocalDate serveDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
-            String[] deadlines = countDates(serveDate);
-            displayDeadlines(deadlines);
+            //Gets Current Selection from Spinners
+            LocalDate startOfCalculationsDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
+            String[] deadlinesInWorkingDays = calculateDeadlinesInWorkingDays(startOfCalculationsDate);
+            setDeadlineTextViewValues(deadlinesInWorkingDays);
         } catch (Exception ex) {
             Toast.makeText(this, "Invalid Serving Date", Toast.LENGTH_LONG).show();
         }
     }
 
-    private class AppliedHolidaysAdapter extends BaseAdapter {
+    private class ExcludedDatesAdapter extends BaseAdapter {
         private final Context context;
         private final ArrayList<PublicHolidays> appliedPublicHolidays;
 
-        public AppliedHolidaysAdapter(Context context, ArrayList<PublicHolidays> appliedPublicHolidays) {
+        public ExcludedDatesAdapter(Context context, ArrayList<PublicHolidays> appliedPublicHolidays) {
             this.context = context;
             this.appliedPublicHolidays = appliedPublicHolidays;
         }
@@ -446,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             TextView smallText = row.findViewById(R.id.smaller_item);
 
             largeText.setText(appliedPublicHolidays.get(position).getName());
-            smallText.setText(dtf.format(appliedPublicHolidays.get(position).getStart()));
+            smallText.setText(dateTimeFormatter.format(appliedPublicHolidays.get(position).getStart()));
 
 
             return row;
