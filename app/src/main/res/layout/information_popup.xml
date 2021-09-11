@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text='\"Official Serving Date\"'
+            android:background="@color/Skwangles_medium_aquamarine"
             android:textColor="@color/Skwangles_onyx"
             android:textStyle="bold"
             ></TextView>
@@ -45,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="It means the first Working date AFTER the document has been served. \nIt is the point in which the \24 day count down begins"
+            android:text="@string/workingdaydef"
             ></TextView>
 
         <Space
@@ -57,6 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:background="@color/Skwangles_medium_aquamarine"
             android:text="Specifications"
             android:textColor="@color/Skwangles_onyx"
             android:textStyle="bold"
@@ -78,6 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:background="@color/Skwangles_medium_aquamarine"
             android:text="References"
             android:textColor="@color/Skwangles_onyx"
             android:textStyle="bold"
@@ -108,6 +111,7 @@
         android:id="@+id/information_exitbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/Skwangles_medium_aquamarine"
         android:text="Exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

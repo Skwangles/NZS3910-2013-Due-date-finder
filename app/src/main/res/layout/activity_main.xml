@@ -76,41 +76,47 @@
             android:textOn="@string/_7_3_2_5_days"
             app:showText="true" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/button_processDates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/Skwangles_onyx"
-            android:text="@string/process_button_name"
-            android:textColor="@color/white" />
+    <Button
+        android:id="@+id/button_processDates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/Skwangles_onyx"
+        android:text="@string/process_button_name"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/Process_warning_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="5dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_processDates" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="5dp"
         android:background="@color/Skwangles_onyx" />
 
     <LinearLayout
         android:id="@+id/switch_option_two_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#70A9A1"
         android:orientation="vertical">
 
         <TextView
@@ -119,13 +125,13 @@
             android:layout_height="wrap_content"
             android:background="@color/Skwangles_secondary_rifle_green"
             android:gravity="center"
-            android:text="Engineer issue Progress Payment Schedule:"
-            android:textColor="@color/Skwangles_Lavender_Blush"
-            android:textSize="20sp" />
+            android:text="@string/firsttitle"
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="16sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <TextView
             android:id="@+id/result_seven_days_1"
@@ -134,7 +140,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/Skwangles_onyx"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:id="@+id/linearlayout_three_two"
@@ -144,7 +150,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="5dp" />
 
             <TextView
                 android:id="@+id/three_days_info"
@@ -152,13 +158,13 @@
                 android:layout_height="wrap_content"
                 android:background="@color/Skwangles_secondary_rifle_green"
                 android:gravity="center"
-                android:text="Principal advise amendments/deductions:"
-                android:textColor="@color/Skwangles_Lavender_Blush"
-                android:textSize="18sp" />
+                android:text="@string/secondtitle"
+                android:textColor="@color/Skwangles_onyx"
+                android:textSize="16sp" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="5dp" />
 
             <TextView
                 android:id="@+id/result_seven_three_days"
@@ -167,26 +173,25 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/Skwangles_onyx"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="5th August 2021" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="5dp" />
             <TextView
                 android:id="@+id/seven_three_two_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/Skwangles_secondary_rifle_green"
                 android:gravity="center"
-                android:maxLines="1"
-                android:text="Engineer issue replacement Schedule (if applicable):"
-                android:textColor="@color/Skwangles_Lavender_Blush"
+                android:text="@string/third_title"
+                android:textColor="@color/Skwangles_onyx"
                 android:textSize="16sp" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="10dp" />
+                android:layout_height="5dp" />
 
             <TextView
                 android:id="@+id/result_seven_three_two_days"
@@ -195,13 +200,13 @@
                 android:gravity="center"
                 android:text=""
                 android:textColor="@color/Skwangles_onyx"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 tools:text="5th August 2021" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <TextView
             android:id="@+id/final_days_info"
@@ -209,9 +214,9 @@
             android:layout_height="wrap_content"
             android:background="@color/Skwangles_secondary_rifle_green"
             android:gravity="center"
-            android:text="Principal makes payment:"
-            android:textColor="@color/Skwangles_Lavender_Blush"
-            android:textSize="18sp" />
+            android:text="@string/finaltitle"
+            android:textColor="@color/Skwangles_onyx"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/result_seventeen"
@@ -220,7 +225,7 @@
             android:gravity="center"
             android:text=""
             android:textColor="@color/Skwangles_onyx"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 
@@ -228,15 +233,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#70A9A1">
+        android:layout_weight="1">
 
         <Button
             android:id="@+id/button_changeregion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/Skwangles_onyx"
-            android:text="Change \n Region"
+            android:text="@string/change_n_region"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -245,7 +249,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/Skwangles_onyx"
-            android:text="See\nDefinitions"
+            android:text="@string/see_ndefinitions"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_showNonWorkingDays"
             app:layout_constraintStart_toEndOf="@+id/button_changeregion" />
@@ -255,7 +259,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/Skwangles_onyx"
-            android:text="Excluded\nDates"
+            android:text="@string/excluded_ndates_buttons"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

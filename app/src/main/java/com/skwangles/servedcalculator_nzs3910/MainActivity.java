@@ -3,6 +3,7 @@ package com.skwangles.servedcalculator_nzs3910;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button buttonShowNonWorkingDays;
     String regionOfHolidays;
     SwitchMaterial switchBetweenResultLayout;
+    ProgressBar loadingCircle;
+
 
     // Spinner Selections
     int[] selectedSpinnerIndexes = new int[]{99, 99, 99};
@@ -91,13 +95,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonChangeMyRegion = findViewById(R.id.button_changeregion);
         switchBetweenResultLayout = findViewById(R.id.switch_dateLayout);
         buttonShowNonWorkingDays = findViewById(R.id.button_showNonWorkingDays);
+        buttonShowInformation = findViewById(R.id.button_definitions);
+        loadingCircle = (ProgressBar) findViewById(R.id.progressBar1);
 
-
+        //Setup loading circle
+        loadingCircle.setVisibility(View.GONE);
         //Get additional Information
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
             selectedSpinnerIndexes = intent.getIntArrayExtra(SPINNER_INDEX);
-            saveSpinnerIndexToVariable();
         }
 
         //Gets and notifies of globally stored Region of User.
@@ -118,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view != null) {
             int id = view.getId();
             if (id == R.id.button_processDates) {
+                loadingCircle.setVisibility(View.VISIBLE);
                 fetchHolidayListFromGoogle();//Will fetch and wait asynchronously
             }
             if (id == R.id.button_changeregion) {
@@ -251,28 +258,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startRegionSelectActivity() {
+        saveSpinnerIndexToVariable();
         Intent myIntent = new Intent(MainActivity.this, RegionSelect.class);
         myIntent.putExtra(SPINNER_INDEX, selectedSpinnerIndexes);
         MainActivity.this.startActivity(myIntent);
+        finish();
     }
 
     private String[] calculateDeadlinesInWorkingDays(LocalDate workingDate) {
         List<PublicHolidays> publicHolidaysList = fromItemListGetPublicHolidays(publicHolidaysItemFromGoogle);
         excludedDatesArrayList = new ArrayList<>(); //Resets the numbers to be empty for the isPublicOrWeekend
-        int workingDays = 17 + 7; //Fixed term length
+        int workingDays = 17; //Fixed term length
         String[] WorkingDates = new String[4]; // 4 important dates
         while (workingDays >= 0) {
             if (!isPublicOrWeekend(workingDate, publicHolidaysList, excludedDatesArrayList)) {
                 workingDays--;//only decrements when considering actual working days
                 Log.d("WorkingDays", workingDate.toString() + " " + workingDays);
-                if (workingDays == 17) { //Numbers apply themselves, 1 cycle behind.
+                if (workingDays == 10) { //Numbers apply themselves, 1 cycle behind.
                     WorkingDates[0] = dateTimeFormatter.format(workingDate); // 7th day
-                } else if (workingDays == 14) {
+                } else if (workingDays == 7) {
                     WorkingDates[1] = dateTimeFormatter.format(workingDate); // 7 + 3rd day
-                } else if (workingDays == 12) {
+                } else if (workingDays == 5) {
                     WorkingDates[2] = dateTimeFormatter.format(workingDate); // 7 + 3 + 2nd day
                 } else if (workingDays == 0) {
-                    WorkingDates[3] = dateTimeFormatter.format(workingDate); // Final Day (7 + 17th day)
+                    WorkingDates[3] = dateTimeFormatter.format(workingDate); // Final Day (7 + 3 + 2 + 5th day)
                 }
 
             }
@@ -390,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Holidays holiday = response.body();
                     if (holiday == null) {
                         publicHolidaysItemFromGoogle = null;
-                        Toast.makeText(context, "Empty item - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Failed to get List - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
                     } else {
                         publicHolidaysItemFromGoogle = holiday.getItems();
                     }
@@ -403,7 +412,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     publicHolidaysItemFromGoogle = null;
                     Toast.makeText(context, "Failed connection - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
                     runDateCalculationProcesses();
-
                 }
             });
         } else {
@@ -420,6 +428,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setDeadlineTextViewValues(deadlinesInWorkingDays);
         } catch (Exception ex) {
             Toast.makeText(this, "Invalid Serving Date", Toast.LENGTH_LONG).show();
+        }
+        finally {
+            loadingCircle.setVisibility(View.GONE);//hide loading circle
         }
     }
 
