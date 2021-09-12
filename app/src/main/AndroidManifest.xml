@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.skwangles.servedcalculator_nzs3910"
-    android:versionCode="1"
-    android:versionName="InitialRelease">
+    android:versionCode="2"
+    android:versionName="ColourSchemeUpdate">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
