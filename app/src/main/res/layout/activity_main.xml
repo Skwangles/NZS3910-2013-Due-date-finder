@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Skwangles_light_orange"
+    android:background="@color/Skwangles_Magic_Mint"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/enter_the_serving_date_the_clock_starts_from"
+        android:background="@color/Skwangles_medium_aquamarine"
+        android:text="@string/spinner_instruction_title_text"
         android:textColor="@color/Skwangles_onyx"
         android:textSize="20sp" />
 
@@ -35,6 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:foregroundTint="@color/Skwangles_rifle_green"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -44,6 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:foregroundTint="@color/Skwangles_rifle_green"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -53,6 +56,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:foregroundTint="@color/Skwangles_rifle_green"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"
             tools:ignore="SpeakableTextPresentCheck" />
@@ -72,8 +76,10 @@
             android:gravity="center"
             android:minHeight="48dp"
             android:textSize="20sp"
-            android:textOff="@string/_7_17_days"
-            android:textOn="@string/_7_3_2_5_days"
+            android:shadowColor="@color/Skwangles_middle_green"
+            android:textColor="@color/Skwangles_onyx"
+            android:textOff="@string/switch_basiclayout_text"
+            android:textOn="@string/extended_date_layout_text"
             app:showText="true" />
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,10 +129,10 @@
             android:id="@+id/seven_days_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Skwangles_secondary_rifle_green"
+            android:background="@color/Skwangles_middle_green"
             android:gravity="center"
-            android:text="@string/firsttitle"
-            android:textColor="@color/Skwangles_onyx"
+            android:text="@string/first_date"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
         <Space
@@ -156,10 +162,10 @@
                 android:id="@+id/three_days_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/Skwangles_secondary_rifle_green"
+                android:background="@color/Skwangles_middle_green"
                 android:gravity="center"
-                android:text="@string/secondtitle"
-                android:textColor="@color/Skwangles_onyx"
+                android:text="@string/second_date"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <Space
@@ -179,14 +185,15 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="5dp" />
+
             <TextView
                 android:id="@+id/seven_three_two_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/Skwangles_secondary_rifle_green"
+                android:background="@color/Skwangles_middle_green"
                 android:gravity="center"
-                android:text="@string/third_title"
-                android:textColor="@color/Skwangles_onyx"
+                android:text="@string/third_date"
+                android:textColor="#000000"
                 android:textSize="16sp" />
 
             <Space
@@ -212,10 +219,10 @@
             android:id="@+id/final_days_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/Skwangles_secondary_rifle_green"
+            android:background="@color/Skwangles_middle_green"
             android:gravity="center"
-            android:text="@string/finaltitle"
-            android:textColor="@color/Skwangles_onyx"
+            android:text="@string/final_date"
+            android:textColor="#000000"
             android:textSize="16sp" />
 
         <TextView
@@ -239,8 +246,8 @@
             android:id="@+id/button_changeregion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Skwangles_onyx"
-            android:text="@string/change_n_region"
+            android:backgroundTint="@color/Skwangles_rifle_green"
+            android:text="@string/change_region_activity_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -248,8 +255,8 @@
             android:id="@+id/button_definitions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Skwangles_onyx"
-            android:text="@string/see_ndefinitions"
+            android:backgroundTint="@color/Skwangles_rifle_green"
+            android:text="@string/see_definitions_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_showNonWorkingDays"
             app:layout_constraintStart_toEndOf="@+id/button_changeregion" />
@@ -258,8 +265,8 @@
             android:id="@+id/button_showNonWorkingDays"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Skwangles_onyx"
-            android:text="@string/excluded_ndates_buttons"
+            android:backgroundTint="@color/Skwangles_rifle_green"
+            android:text="@string/excluded_dates_activity_buttons"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

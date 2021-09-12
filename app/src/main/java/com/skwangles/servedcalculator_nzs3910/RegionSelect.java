@@ -75,7 +75,7 @@ public class RegionSelect extends AppCompatActivity implements View.OnClickListe
     //Base Level Functions
     //region base level
     private void regionSelectSpinnerSetup() {
-        //Spinner Info Setup
+        //Spinner Info Setup - New Zealand Regions
         String[] region_item_list = new String[]{"Auckland", "Bay of Plenty", "Canterbury", "Gisborne", "Hawke's Bay", "Manawatu-Whanganui", "Marlborough", "Nelson", "Northland", "Otago", "Southland", "Taranaki", "Tasman", "Waikato", "Wellington", "West Coast"};
         // Sets the list of items in the spinners
         ArrayAdapter<String> region_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, region_item_list);

@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String USER_REGION = "WhereAreYou";
     public static final String SWITCH_STATE = "Layout";
     public static final String SPINNER_INDEX = "selectedSpinnerIndex";
-
     final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM uuuu", Locale.ENGLISH); //Layout of Dates
 
     //Popup Makers

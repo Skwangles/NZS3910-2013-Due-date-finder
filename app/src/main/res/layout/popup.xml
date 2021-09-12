@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/Skwangles_light_orange">
+    android:background="@color/Skwangles_Magic_Mint">
     <view class="androidx.appcompat.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,6 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Exit"
+        android:backgroundTint="@color/Skwangles_rifle_green"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
