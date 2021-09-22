@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -20,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,7 +32,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -72,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SwitchMaterial switchBetweenResultLayout;
     ProgressBar loadingCircle;
 
-
     // Spinner Selections
     int[] selectedSpinnerIndexes = new int[]{99, 99, 99};
 
@@ -96,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonShowNonWorkingDays = findViewById(R.id.button_showNonWorkingDays);
         buttonShowInformation = findViewById(R.id.button_definitions);
         loadingCircle = (ProgressBar) findViewById(R.id.progressBar1);
-
         //Setup loading circle
         loadingCircle.setVisibility(View.GONE);
+
         //Get additional Information
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
@@ -254,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         three.setText(deadlines[1]);
         two.setText(deadlines[2]);
         finalResult.setText(deadlines[3]);
+
+        //Set CalendarView bounds
     }
 
     private void startRegionSelectActivity() {
@@ -313,12 +320,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected List<PublicHolidays> fromItemListGetPublicHolidays(List<Item> publicHolidaysItemFromGoogle) {
         List<PublicHolidays> publicHolidays = new ArrayList<>();
-        for (int i = 0; i < publicHolidaysItemFromGoogle.size(); i++) {
-            Item currentItem = publicHolidaysItemFromGoogle.get(i);
-            if (currentItem.getDescription().equals("Public holiday")) {
-                publicHolidays.add(new PublicHolidays(currentItem));//gets Nation holidays
-            } else if (!loadRegionDateFromSharedPref().equals("") && currentItem.getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
-                publicHolidays.add(new PublicHolidays(currentItem));//adds
+        if (publicHolidaysItemFromGoogle != null) {//Returns empty list if holiday info is empty
+            for (int i = 0; i < publicHolidaysItemFromGoogle.size(); i++) {
+                Item currentItem = publicHolidaysItemFromGoogle.get(i);
+                if (currentItem.getDescription().equals("Public holiday")) {
+                    publicHolidays.add(new PublicHolidays(currentItem));//gets Nation holidays
+                } else if (!loadRegionDateFromSharedPref().equals("") && currentItem.getDescription().contains("Public holiday") && publicHolidaysItemFromGoogle.get(i).getDescription().contains(regionOfHolidays)) { //gets Regional holidays
+                    publicHolidays.add(new PublicHolidays(currentItem));//adds
+                }
             }
         }
         return publicHolidays;
@@ -380,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void fetchHolidayListFromGoogle() {
 
         String BaseURL = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/";
-        // en.new_zealand#holiday@group.v.calendar.google.com')
+        // en.new_zealand#holiday@group.v.calendar.google.com' - Gives Gooogle's list of holidays
         if (publicHolidaysItemFromGoogle == null) {
             Context context = this;
             final Retrofit retrofit = new Retrofit.Builder()
@@ -399,29 +408,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (holiday == null) {
                         publicHolidaysItemFromGoogle = null;
                         Toast.makeText(context, "Failed to get List - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
+                        runDateCalculationProcesses(Boolean.FALSE);
                     } else {
                         publicHolidaysItemFromGoogle = holiday.getItems();
+                        runDateCalculationProcesses(Boolean.TRUE);
                     }
-                    runDateCalculationProcesses();
-
                 }
 
                 @Override
                 public void onFailure(Call<Holidays> call, Throwable throwable) {
                     publicHolidaysItemFromGoogle = null;
                     Toast.makeText(context, "Failed connection - Must calculate w/o public holidays", Toast.LENGTH_SHORT).show();
-                    runDateCalculationProcesses();
+                    runDateCalculationProcesses(Boolean.FALSE);
                 }
             });
         } else {
-            runDateCalculationProcesses();
+            runDateCalculationProcesses(Boolean.TRUE);
         }
         //String api_location = "https://www.googleapis.com/calendar/v3/calendars/en.new_zealand%23holiday%40group.v.calendar.google.com/events?key=AIzaSyD2Xy5SVR22tomUkKkxKEGMIboLbAO0ATE";
     }
 
-    private void runDateCalculationProcesses() {
+    private void runDateCalculationProcesses(Boolean couldGetList) {
         try {
             //Gets Current Selection from Spinners
+            //Log.i("PrintOut", spinnerOfYear.getSelectedItem().toString() + " " + spinnerOfMonth.getSelectedItem().toString() + " " +  spinnerOfDay.getSelectedItem().toString());
             LocalDate startOfCalculationsDate = LocalDate.of(Integer.parseInt(spinnerOfYear.getSelectedItem().toString()), Integer.parseInt(spinnerOfMonth.getSelectedItem().toString()), Integer.parseInt(spinnerOfDay.getSelectedItem().toString()));
             String[] deadlinesInWorkingDays = calculateDeadlinesInWorkingDays(startOfCalculationsDate);
             setDeadlineTextViewValues(deadlinesInWorkingDays);

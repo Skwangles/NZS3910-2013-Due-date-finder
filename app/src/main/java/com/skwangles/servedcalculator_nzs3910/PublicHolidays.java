@@ -26,7 +26,7 @@ public class PublicHolidays {
             }
 
         } else if (type == 1) {
-            this.name = "Christmas Break";
+            this.name = "⛨ Christmas Break";
 
         } else {
             this.name = "Unspecified";
