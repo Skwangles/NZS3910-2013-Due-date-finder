@@ -6,4 +6,9 @@
     <string name="date_format_information">Day — Month — Year</string>
     <string name="process_button_name">Process</string>
     <string name="KeyDefinitions">Important Information for using this app</string>
+    <string name="FirstDate">Engineer issue Progress Payment Schedule:</string>
+    <string name="SecondDate">Principal advise amendments/deductions:</string>
+    <string name="ThirdDate">Engineer issue replacement Schedule (if applicable):</string>
+    <string name="FourthDate">Principal makes payment:</string>
+    <string name="add_event">Add Event</string>
 </resources>

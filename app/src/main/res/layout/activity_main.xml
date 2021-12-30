@@ -92,6 +92,8 @@
         <TextView
             android:id="@+id/Process_warning_text"
             android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:textColor="@color/Skwangles_onyx"
             android:layout_height="wrap_content" />
 
         <Space
@@ -119,22 +121,37 @@
             android:layout_height="wrap_content"
             android:background="@color/Skwangles_secondary_rifle_green"
             android:gravity="center"
-            android:text="Engineer issue Progress Payment Schedule:"
+            android:text="@string/FirstDate"
             android:textColor="@color/Skwangles_Lavender_Blush"
             android:textSize="20sp" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="10dp" />
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/dateContainer1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/result_seven_days_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/result_seven_days_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/Skwangles_onyx"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_addfirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_event"
+        app:layout_constraintEnd_toEndOf="parent"></Button>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/linearlayout_three_two"
@@ -152,23 +169,38 @@
                 android:layout_height="wrap_content"
                 android:background="@color/Skwangles_secondary_rifle_green"
                 android:gravity="center"
-                android:text="Principal advise amendments/deductions:"
+                android:text="@string/SecondDate"
                 android:textColor="@color/Skwangles_Lavender_Blush"
                 android:textSize="18sp" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
-
-            <TextView
-                android:id="@+id/result_seven_three_days"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dateContainer2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/Skwangles_onyx"
-                android:textSize="18sp"
-                tools:text="5th August 2021" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/result_seven_three_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/Skwangles_onyx"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="5th August 2021" />
+
+                <Button
+                    android:id="@+id/button_addsecond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_event"
+                    app:layout_constraintEnd_toEndOf="parent"></Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Space
                 android:layout_width="match_parent"
@@ -180,23 +212,40 @@
                 android:background="@color/Skwangles_secondary_rifle_green"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Engineer issue replacement Schedule (if applicable):"
+                android:text="@string/ThirdDate"
                 android:textColor="@color/Skwangles_Lavender_Blush"
                 android:textSize="16sp" />
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
-
-            <TextView
-                android:id="@+id/result_seven_three_two_days"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dateContainer3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text=""
-                android:textColor="@color/Skwangles_onyx"
-                android:textSize="18sp"
-                tools:text="5th August 2021" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/result_seven_three_two_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/Skwangles_onyx"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="5th August 2021" />
+
+                <Button
+                    android:id="@+id/button_addthird"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_event"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"></Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <Space
@@ -209,18 +258,34 @@
             android:layout_height="wrap_content"
             android:background="@color/Skwangles_secondary_rifle_green"
             android:gravity="center"
-            android:text="Principal makes payment:"
+            android:text="@string/FourthDate"
             android:textColor="@color/Skwangles_Lavender_Blush"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/result_seventeen"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dateContainer4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@color/Skwangles_onyx"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/result_seventeen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/Skwangles_onyx"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/button_addfourth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_event"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></Button>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

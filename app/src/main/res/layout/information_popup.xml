@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="It means the first Working date AFTER the document has been served. \nIt is the point in which the \24 day count down begins"
+            android:text="It means the first Working day AFTER the document has been given to you. \nIt is the point in which the count down begins"
             ></TextView>
 
         <Space
@@ -99,8 +99,75 @@
 
 <Space
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="30dp"
     />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="How To Use"
+            android:textColor="@color/Skwangles_onyx"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="To factor in public holidays, you MUST be connected to the internet\n\n1. Open 'Change Region' and ensure it is correct."
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="2. Select the date the document was 'served' (above)"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="3. Select what dates you want to view (Optional)"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="4. Click Process"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="5. Open 'Excluded Dates' to ensure it is correct"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="6. Click 'Add Event' to add date to Outlook"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="7. Done"
+            />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Note: \nThis is a tool meant to *assist* calculating the dates. Please make good use of the 'Excluded Dates' tab to double check any calculations"
+            />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            />
+
+
     </LinearLayout>
 
 
