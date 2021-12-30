@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/Skwangles_light_orange"
+    android:background="@color/Skwangles_Magic_Mint"
     tools:context=".RegionSelect">
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.2"></Space>
+        android:layout_weight="0.2"/>
 
 
     <TextView
         android:id="@+id/region_activity_titles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/Skwangles_Green_Sheen"
-        android:text="NZS3910 - 24 Working Days"
+        android:background="@color/Skwangles_middle_green"
+        android:text="@string/nzs_3910_2013"
         android:textAlignment="center"
         android:textColor="@color/Skwangles_onyx"
         android:textSize="30sp" />
@@ -27,7 +26,7 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"></Space>
+        android:layout_weight="1"/>
     <TextView
         android:id="@+id/previous_region"
         android:layout_width="match_parent"
@@ -46,19 +45,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Choose Your Home Region"
+        android:textStyle="bold"
+        android:text="@string/choose_your_home_region_title"
         android:textColor="@color/Skwangles_onyx"
         android:textSize="18sp" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight=".1"></Space>
+        android:layout_weight=".1"/>
 
     <Spinner
         android:id="@+id/region_selection_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foregroundTint="@color/Skwangles_rifle_green"
         android:background="@android:drawable/btn_dropdown"
         android:gravity="center"
         android:spinnerMode="dropdown" />
@@ -66,7 +67,7 @@
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight=".1"></Space>
+        android:layout_weight=".1"/>
 
     <Button
         android:id="@+id/Complete_setup"
@@ -75,24 +76,24 @@
         android:layout_gravity="center"
         android:backgroundTint="@color/Skwangles_onyx"
         android:gravity="center"
-        android:text="Proceed" />
+        android:text="@string/select_region_button_text" />
 
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"></Space>
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/Go_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="@color/Skwangles_medium_aquamarine"
+        android:backgroundTint="@color/Skwangles_rifle_green"
         android:gravity="center"
         android:visibility="gone"
-        android:text="Go Back" />
+        android:text="@string/region_select_back_button" />
     <Space
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight=".2"></Space>
+        android:layout_weight=".2"/>
 </LinearLayout>

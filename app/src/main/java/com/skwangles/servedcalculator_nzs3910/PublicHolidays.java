@@ -7,33 +7,30 @@ import java.util.Locale;
 public class PublicHolidays {
     private LocalDate start;
     private String name;
-    private final String type;
+    //private final String type;
 
     public PublicHolidays(Item item) {
         DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-        this.name = item.getSummary();
-        this.type = item.getDescription();
+        this.name = "★ " + item.getSummary();
+        //this.type = item.getDescription();
         this.start = LocalDate.parse(item.getStart().getDate(), parser);
         this.start = longWeekendCase();
     }
 
     public PublicHolidays(LocalDate otherEvent, int type) {
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         if (type == 0) {
             if (otherEvent.getDayOfWeek().getValue() == 7) {
-                this.name = "⍟ Sunday";
+                this.name = "Sunday";
             } else if (otherEvent.getDayOfWeek().getValue() == 6) {
-                this.name = "★ Saturday";
+                this.name = "Saturday";
             }
-            this.type = "Weekend";
 
         } else if (type == 1) {
-            this.name = "Christmas Break";
-            this.type = "Christmas Break";
+            this.name = "⛨ Christmas Break";
 
         } else {
             this.name = "Unspecified";
-            this.type = "Unspecified";
+
         }
         this.start = otherEvent;
     }
@@ -58,7 +55,4 @@ public class PublicHolidays {
         return name;
     }
 
-    public String getType() {
-        return type;
-    }
 }

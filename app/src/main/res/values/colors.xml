@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="Skwangles_light_orange">#F4D1AE</color>
-    <color name="Skwangles_secondary_rifle_green">#475841</color>
+    <color name="Skwangles_rifle_green">#3f4531</color>
     <color name="Skwangles_onyx">#3F403F</color>
-    <color name="Skwangles_Turquoise">#4AC9AE</color>
-    <color name="Skwangles_medium_aquamarine">#74D3AE</color>
-    <color name="Skwangles_Lavender_Blush">#EEE5E9</color>
-    <color name="Skwangles_Green_Sheen">#70A9A1</color>
+    <color name="Skwangles_middle_green">#499167</color>
+    <color name="Skwangles_medium_aquamarine">#5fdd9d</color>
+    <color name="Skwangles_Aquamarine">#76F7BF</color>
+    <color name="Skwangles_Magic_Mint">#91F9E5</color>
 </resources>
