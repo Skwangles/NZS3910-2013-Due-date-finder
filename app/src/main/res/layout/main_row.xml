@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/Skwangles_Magic_Mint">
+    android:background="?colorPrimary">
 
     <TextView
         android:id="@+id/larger_item"
@@ -12,7 +12,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:text="Event"
-        android:textColor="@color/Skwangles_onyx"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Date"
-        android:textColor="@color/Skwangles_onyx"
+        android:textColor="?colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@id/larger_item"
         android:textSize="14sp"/>
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/Skwangles_Magic_Mint"
+    android:background="?colorPrimary"
     tools:context=".RegionSelect">
 
     <Space
@@ -17,10 +17,10 @@
         android:id="@+id/region_activity_titles"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/Skwangles_middle_green"
+        android:textStyle="bold"
         android:text="@string/nzs_3910_2013"
         android:textAlignment="center"
-        android:textColor="@color/Skwangles_onyx"
+        android:textColor="?colorOnPrimary"
         android:textSize="30sp" />
 
     <Space
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textAlignment="center"
-        android:textColor="@color/Skwangles_onyx"
+        android:textColor="?colorOnPrimary"
         android:textSize="30sp" />
     <Space
         android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:text="@string/choose_your_home_region_title"
-        android:textColor="@color/Skwangles_onyx"
+        android:textColor="?colorOnPrimary"
         android:textSize="18sp" />
 
     <Space
@@ -59,7 +59,6 @@
         android:id="@+id/region_selection_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:foregroundTint="@color/Skwangles_rifle_green"
         android:background="@android:drawable/btn_dropdown"
         android:gravity="center"
         android:spinnerMode="dropdown" />
@@ -74,7 +73,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/Skwangles_onyx"
+        android:backgroundTint="?colorSecondary"
+        android:textColor="?colorOnSecondary"
         android:gravity="center"
         android:text="@string/select_region_button_text" />
 
@@ -88,7 +88,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:backgroundTint="@color/Skwangles_rifle_green"
+        android:backgroundTint="?colorSecondary"
+        android:textColor="?colorOnSecondary"
         android:gravity="center"
         android:visibility="gone"
         android:text="@string/region_select_back_button" />

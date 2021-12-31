@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,10 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switchBetweenResultLayout = findViewById(R.id.switch_dateLayout);
         buttonShowNonWorkingDays = findViewById(R.id.button_showNonWorkingDays);
         buttonShowInformation = findViewById(R.id.button_definitions);
-        buttonAddOne = findViewById(R.id.button_addfirst);
-        buttonAddTwo = findViewById(R.id.button_addsecond);
-        buttonAddThree = findViewById(R.id.button_addthird);
-        buttonAddFour = findViewById(R.id.button_addfourth);
+        buttonAddOne = findViewById(R.id.addfirst);
+        buttonAddTwo = findViewById(R.id.addsecond);
+        buttonAddThree = findViewById(R.id.addthird);
+        buttonAddFour = findViewById(R.id.addfourth);
 
         // Setup of Spinners-------
         spinnerSetup();
@@ -136,16 +137,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (id == R.id.button_definitions){
                 makeAndDisplayInformationPopup();//Popup holds all the specification of the app
             }
-            if(id == R.id.button_addfirst){
+            if(id == R.id.addfirst){
                 AddToUserCalendar(0);//Index is zero based
             }
-            if(id == R.id.button_addsecond){
+            if(id == R.id.addsecond){
                 AddToUserCalendar(1);
             }
-            if(id == R.id.button_addthird){
+            if(id == R.id.addthird){
                 AddToUserCalendar(2);
             }
-            if(id == R.id.button_addfourth){
+            if(id == R.id.addfourth){
                 AddToUserCalendar(3);
             }
         }

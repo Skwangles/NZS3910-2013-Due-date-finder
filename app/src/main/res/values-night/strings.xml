@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nzs_3910_2013">NZS3910 - Working Day Calc</string>
+    <string name="choose_your_home_region_title">Choose your NZ Region</string>
+    <string name="region_select_back_button">Back</string>
+    <string name="exit">Exit</string>
+</resources>
