@@ -1,5 +1,5 @@
 # NZS3910-2013-Due-date-finder
-## Android app with calculates 24 working NZ days, based on the region, with 4 calendar addable events.
+## Android app with calculates specific deadlines over 24 *working* days, based on the region, with 4 calendar addable events.
 
 ### Purpose 
 Developed for use by Civil engineers to return payment schedules for contractors.
